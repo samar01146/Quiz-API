@@ -1,7 +1,7 @@
 """courses URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
+    https://docs.djangoproject.com/en /4.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -26,7 +26,6 @@ urlpatterns = [
     path('quiz/<int:id>/' ,QuizView.as_view()),
     path('studentregistration/',UserRegistration.as_view(), name="studentregistration" ),
     path('studentlogin/',UserLogin.as_view(), name="studentlogin" ),
-    path('submit/',SubmitView.as_view(), name="submit"),
+    path('submit/',ResultView.as_view(), name="submit"),
     path('courseview/' , CourseView.as_view() , name='course')
-
 ]
