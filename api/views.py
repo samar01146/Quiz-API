@@ -1,11 +1,13 @@
 from django.contrib.auth import authenticate, login
+from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.core.mail import send_mail
+
 from .serializers import *
+
 
 # Create your views here.
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -38,11 +40,11 @@ class UserLogin(APIView):
         password = serializer.validated_data['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            subject = "DRF AUTH TESTING MAIL"
-            message = "this is message for OTP"
-            from_email='pma1.globaliasoft@gmail.com'
-            recipient_list=['sth.globaliasoft@gmail.com',]
-            send_mail(subject,message,from_email,recipient_list)
+            # subject = "DRF AUTH TESTING MAIL"
+            # message = "this is message for OTP"
+            # from_email='pma1.globaliasoft@gmail.com'
+            # recipient_list=['sth.globaliasoft@gmail.com',]
+            # send_mail(subject,message,from_email,recipient_list)
             login(request, user)
             token = get_tokens_for_user(user)
             return Response({'token': token, 'msg': 'Login Success'}, status=status.HTTP_200_OK)
@@ -87,7 +89,7 @@ class QuizView(APIView):
         showquestion = AddQuestion.objects.filter(course__id=id)
         serializers = AddQuestionSerializer(showquestion, many=True)
         return Response(serializers.data)
-
+                 
     def post(self, request):
         user = request.user
         question = request.data.get('question')
@@ -124,6 +126,7 @@ class ResultView(APIView):
         stu_ans = YourAnswer.objects.filter(
             user=request.user).values('question_id', 'your_answer')
         for i in stu_ans:
+            
             correct_ans = ShowQuestion.objects.filter(
                 question__id=i['question_id']).first()
             if correct_ans.right_answer == i['your_answer']:
